@@ -61,15 +61,16 @@
 
             if (!$recipe_data->recipeInstructions && !$recipe_data->recipeIngredient)
                 return;
-
+            //print_r($recipe_data);
             $data = array();
             $data["page_id"] = hash('sha256', $url);
             $data["source"] = $this->getDomainName($url);
             $data["recipe_url"] = $url;
             $data["recipe_name"] = str_replace("Recipe by Tasty", "", $recipe_data->name);
             $data["recipe_img"] =  $recipe_data->image;
-            $data["recipe_pin_img"] = array();
-            $data["ratings"] = (isset($recipe_data->aggregateRating->bestRating))  ? $recipe_data->aggregateRating->bestRating : null;
+            $data["recipe_pin_img"] = [];
+            $data["ratings"] = array("average" => (isset($recipe_data->aggregateRating->ratingValue))  ? $recipe_data->aggregateRating->ratingValue : null, "total"=>(isset($recipe_data->aggregateRating->ratingCount))  ? $recipe_data->aggregateRating->ratingCount : null);
+
             $data["recipe_video_embedded"] = "";
             $data["recipe_type"] = "";
             $data["summary"] = (isset($recipe_data->description)) ? $recipe_data->description : null;
@@ -116,7 +117,9 @@
                 )
             );
             
-            $data["categories"] = (isset($recipe_data->recipeCategory)) ? $recipe_data->recipeCategory : null;
+            // $data["categories"] = (isset($recipe_data->recipeCategory)) ? $recipe_data->recipeCategory : null;
+            // isset($recipe_data->recipeCategory)) ? $recipe_data->recipeCategory
+            $data["categories"] = $this->getCategoriesObj($recipe_data);
 
             if(isset($recipe_data->tool)){ 
             // if ($recipe_data->tool){
@@ -138,6 +141,7 @@
             } else $nutritions = null;
 
             $data["nutritional_facts"] = $nutritions;
+
             $data["notes"] = (isset($recipe_data->notes)) ? $recipe_data->notes : null;
             
             return $data;
@@ -179,7 +183,8 @@
             foreach($instructions as $instruction) {
                 $data[] = array(
                     "id"=>"", 
-                    "title"=>$instruction->text, 
+                    "type"=>"text",
+                    "value"=>$instruction->text, 
                     "image"=>array( 
                         "src"=>"",
                         "alt"=>"",
@@ -197,31 +202,36 @@
                 $old = $ingredient;
                 $amt = $s = "";
                 $new = preg_replace('# {2,}#', ' ', $old); //remove the 2 spaces
-                if ($old == $new){ // echo "no changes here";
-                    $ar = explode(" ", $ingredient);
-                    $unit = $ar[1];
-                    if (in_array($ar[1], $special_chars) ){
+                
+                if (preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $ingredient)) { 
+                    if ($old == $new){ // echo "no changes here";
+                        $ar = explode(" ", $ingredient);
+                        $unit = $ar[1];
+                        if (in_array($ar[1], $special_chars) ){
+                            $unit = "";
+                        }
+                        foreach ($ar as $c){
+                            if (is_numeric($c) || in_array($c, $special_chars) ){ 
+                                $amt .= $c . ' ';
+                            }
+                            else {
+                                if (strpos($c, '/') !== FALSE){  // Found
+                                    $amt .= $c . ' ';
+                                    $unit = "";
+                                }
+                                else 
+                                    $s .= $c . ' ';
+                            }
+                        }
+                    } else { //"changes here";
                         $unit = "";
                     }
-                    foreach ($ar as $c){
-                        if (is_numeric($c) || in_array($c, $special_chars) ){ 
-                            $amt .= $c . ' ';
-                        }
-                        else {
-                            if (strpos($c, '/') !== FALSE){  // Found
-                                $amt .= $c . ' ';
-                                $unit = "";
-                            }
-                            else 
-                                $s .= $c . ' ';
-                        }
-                    }
-                } else { //"changes here";
-                    $unit = "";
+                } else {
+                    $amt = $unit = "";
                 }
                     
                 $data[] = array(
-                    "ing_type"=> "",
+                    "ing_type"=> "text",
                     "ing_amt"=> trim($amt),
                     "ing_unit"=> trim($unit),
                     "ing_name"=> trim($ingredient),
@@ -252,7 +262,96 @@
             return $data;
         }
 
+        public function getCategoriesObj($recipe_data){
+            $data = [];  
+            $data = array(
+                    'courses'=>$this->getCourses($recipe_data->recipeCategory),
+                    'cuisines'=>$this->getCuisines($recipe_data->recipeCuisine),
+                    'difficulties'=>$this->getDifficulties($recipe_data),
+                    'keywords'=> $this->getKeywords($recipe_data->keywords),
+                    'healthy_recipes'=> array(),
+                    'seasonalities'=> array(),
+                    'meals'=>array() 
+                );
+        
+            return $data;
+        }
+
+        public function getCourses($courses){
+            //$courses = array("Breakfast","Dinner","Dipping Sauce");
+            $data = [];
+            if ($courses){
+                if(is_array($courses)){ 
+                    foreach ($courses as $course){
+                        $data[] = array("value"=>$course, "type"=>"text");
+                    } 
+                    return $data;
+                }
+                $data[] = array("value"=>$courses, "type"=>"text");
+            }
+            
+            return $data;
+        }
+
+        public function getDifficulties(){
+            $data = [];
+            return $data;
+        }
+
+        public function getCuisines($cuisines){
+            $data = [];
+            if ($cuisines){ 
+                if (is_array($cuisines)){ 
+                    foreach ($cuisines as $cuisine){
+                        $data[] = array("value"=>$cuisine, "type"=>"text");
+                    }
+                }
+                $data[] = array("value"=>$cuisines, "type"=>"text");
+            }
+            return $data;
+        }
+
+        public function getKeywords($keywords){
+            $data = [];
+            // $keywords = "A Luxury Meatloaf, Alabama Breakfast Souffle";
+            if ($keywords){
+                $values = explode(",", $keywords);
+                foreach($values as $value){
+                    $data[] = array("value"=>$value,"type"=>"text");
+                }
+            }
+            return $data;
+        }
+
         public function getNutritionalFacts($nutritions){
+            $data = [];
+            // [nutrition] => stdClass Object
+            // (
+            //     [@type] => NutritionInformation
+            //     [calories] => 287 kcal
+            //     [carbohydrateContent] => 62 g
+            //     [proteinContent] => 7 g
+            //     [fatContent] => 2 g
+            //     [saturatedFatContent] => 1 g
+            //     [cholesterolContent] => 70 mg
+            //     [sodiumContent] => 624 mg
+            //     [fiberContent] => 5 g
+            //     [sugarContent] => 24 g
+            //     [servingSize] => 1 serving
+            // )
+            // "nutritional_facts": {
+            //     "serving_size": {
+            //       "qty": "",
+            //       "unit": ""
+            //     },
+            // }
+            // if($nutritions){
+            //     foreach( $nutritions as $key => $nutrition ){ 
+            //         $nutrition['label']; 
+            //         $nutrition['value'] . $nutrition['unit']  
+            //     }
+
+            // }
             return;
         }
 
