@@ -1,0 +1,161 @@
+
+20
+http://schema.orgRecipe2017-07-11T03:22:54Here's what you need: parchment paper, chicken breast, red pepper, yellow pepper, red onion, salsa, taco seasoning, mexican cheese blend, olive oil, salt, pepperhttps://img.buzzfeed.com/thumbnailer-prod-us-east-1/fd6ce4f4938d43b5b0dcba34bb7b8ecd/BFV14814_Parchment-BakedChicken4Ways_FB.jpgFajita Parchment-Baked Chicken Recipe by TastyArray
+(
+    [@type] => Organization
+    [name] => Tasty
+    [logo] => Array
+        (
+            [@type] => ImageObject
+            [url] => https://tasty.co/favicon.ico
+        )
+
+)
+Array
+(
+    [@type] => WebPage
+    [url] => https://tasty.co/recipe/fajita-parchment-baked-chicken
+    [name] => Fajita Parchment-Baked Chicken Recipe by Tasty
+    [description] => Here's what you need: parchment paper, chicken breast, red pepper, yellow pepper, red onion, salsa, taco seasoning, mexican cheese blend, olive oil, salt, pepper
+    [isPartOf] => Array
+        (
+            [@type] => WebSite
+            [url] => https://tasty.co
+            [name] => Tasty
+            [description] => The official home of all things Tasty, the world’s largest food network. Search, watch, and cook every single Tasty recipe and video ever - all in one place!
+            [potentialAction] => Array
+                (
+                    [@type] => SearchAction
+                    [target] => Array
+                        (
+                            [@type] => EntryPoint
+                            [urlTemplate] => https://tasty.co/search?q={search_term}
+                        )
+
+                    [query-input] => Array
+                        (
+                            [@type] => PropertyValueSpecification
+                            [valueRequired] => http://schema.org/True
+                            [valueName] => search_term
+                        )
+
+                )
+
+        )
+
+)
+asparagus, bake, barbecue , chicken, fajita, garlic, healthy, one pan, pesto, potato, quick and easy, tomato, vegetablesArray
+(
+    [0] => Array
+        (
+            [@type] => Person
+            [name] => Alix Traeger
+        )
+
+)
+Array
+(
+    [@type] => NutritionInformation
+    [calories] => 210 calories
+    [carbohydrateContent] => 13 grams
+    [fatContent] => 16 grams
+    [fiberContent] => 2 grams
+    [proteinContent] => 3 grams
+    [sugarContent] => 7 grams
+)
+Array
+(
+    [0] => parchment paper, or aluminium foil, 12x18 inches (30.5 x 46 cm)
+    [1] => 1 chicken breast
+    [2] => ½ red pepper, sliced
+    [3] => ½ yellow pepper
+    [4] => ¼ red onion, sliced
+    [5] => 3 tablespoons salsa
+    [6] => 1 teaspoon taco seasoning
+    [7] => 1 tablespoon mexican cheese blend
+    [8] => 1 tablespoon olive oil
+    [9] => salt, to taste
+    [10] => pepper, to taste
+)
+1 servingArray
+(
+    [0] => Array
+        (
+            [@type] => HowToStep
+            [text] => Preheat oven to 400°F (200°C).
+        )
+
+    [1] => Array
+        (
+            [@type] => HowToStep
+            [text] => Fold the parchment paper in half, then open up.
+        )
+
+    [2] => Array
+        (
+            [@type] => HowToStep
+            [text] => Thinly slice the peppers and onion and lay them on one half of the parchment paper.
+        )
+
+    [3] => Array
+        (
+            [@type] => HowToStep
+            [text] => Drizzle on oil and sprinkle on salt & pepper.
+        )
+
+    [4] => Array
+        (
+            [@type] => HowToStep
+            [text] => Lay the chicken on the peppers. Season with taco seasoning, salt and pepper, and spoon on salsa. Top with cheese.
+        )
+
+    [5] => Array
+        (
+            [@type] => HowToStep
+            [text] => Fold the parchment paper over the chicken, and cinch the paper together by folding it over itself along the edges.
+        )
+
+    [6] => Array
+        (
+            [@type] => HowToStep
+            [text] => Bake for 25-30 minutes or until internal temperature of chicken reaches 165˚F (75˚C).
+        )
+
+    [7] => Array
+        (
+            [@type] => HowToStep
+            [text] => Enjoy!
+        )
+
+)
+Array
+(
+    [@type] => AggregateRating
+    [ratingValue] => 98
+    [ratingCount] => 614
+    [bestRating] => 100
+    [worstRating] => 0
+)
+BakeDinnerFusionOven MittsArray
+(
+    [@type] => VideoObject
+    [contentUrl] => https://vid.tasty.co/output/15904/mp4_640x640/1479942741
+    [duration] => PT0S
+    [description] => Here's what you need: parchment paper, chicken breast, red pepper, yellow pepper, red onion, salsa, taco seasoning, mexican cheese blend, olive oil, salt, pepper
+    [name] => Fajita Parchment-Baked Chicken Recipe by Tasty
+    [publisher] => Array
+        (
+            [@type] => Organization
+            [name] => Tasty
+            [logo] => Array
+                (
+                    [@type] => ImageObject
+                    [url] => https://tasty.co/favicon.ico
+                )
+
+        )
+
+    [thumbnailUrl] => https://img.buzzfeed.com/thumbnailer-prod-us-east-1/fd6ce4f4938d43b5b0dcba34bb7b8ecd/BFV14814_Parchment-BakedChicken4Ways_FB.jpg
+    [uploadDate] => 2017-07-11T03:22:54
+)
+

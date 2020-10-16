@@ -1,0 +1,190 @@
+Array
+(
+    [@context] => http://schema.org
+    [@type] => Recipe
+    [datePublished] => 2020-10-05T17:56:50
+    [description] => Celebrate Latinx Heritage Month with a rich, tangy, crunchy Cubano pie as made by bakery owner Vivian Hernandez-Jackson. Pickles, Cuban-style roasted pork, and a crunchy pastry shell make this a perfect, portable pastry.
+    [image] => https://img.buzzfeed.com/tasty-app-user-assets-prod-us-east-1/recipes/95beb2ae671146fea9072839912288ed.jpeg
+    [name] => Cubano Pies As Made By Vivian Hernandez-Jackson Recipe by Tasty
+    [publisher] => Array
+        (
+            [@type] => Organization
+            [name] => Tasty
+            [logo] => Array
+                (
+                    [@type] => ImageObject
+                    [url] => https://tasty.co/favicon.ico
+                )
+
+        )
+
+    [isPartOf] => Array
+        (
+            [@type] => WebPage
+            [url] => https://tasty.co/recipe/cubano-pies-as-made-by-vivian-hernandez-jackson
+            [name] => Cubano Pies As Made By Vivian Hernandez-Jackson Recipe by Tasty
+            [description] => Celebrate Latinx Heritage Month with a rich, tangy, crunchy Cubano pie as made by bakery owner Vivian Hernandez-Jackson. Pickles, Cuban-style roasted pork, and a crunchy pastry shell make this a perfect, portable pastry.
+            [isPartOf] => Array
+                (
+                    [@type] => WebSite
+                    [url] => https://tasty.co
+                    [name] => Tasty
+                    [description] => The official home of all things Tasty, the world’s largest food network. Search, watch, and cook every single Tasty recipe and video ever - all in one place!
+                    [potentialAction] => Array
+                        (
+                            [@type] => SearchAction
+                            [target] => Array
+                                (
+                                    [@type] => EntryPoint
+                                    [urlTemplate] => https://tasty.co/search?q={search_term}
+                                )
+
+                            [query-input] => Array
+                                (
+                                    [@type] => PropertyValueSpecification
+                                    [valueRequired] => http://schema.org/True
+                                    [valueName] => search_term
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [author] => Array
+        (
+            [0] => Array
+                (
+                    [@type] => Person
+                    [name] => Vivian Hernandez-Jackson
+                )
+
+        )
+
+    [recipeIngredient] => Array
+        (
+            [0] => 1 tablespoon ground cumin
+            [1] => 1 tablespoon dried oregano
+            [2] => 1 tablespoon kosher salt
+            [3] => 1 tablespoon sazon seasoning
+            [4] => 1 lb boneless pork shoulder
+            [5] => 1 bottle mojo marinade
+            [6] => 1 cup water
+            [7] => 2 sheets frozen puff pastry, thawed, divided
+            [8] => 18 dill pickle chips
+            [9] => ¼ cup yellow mustard
+            [10] => 5 slices swiss cheese, halved
+            [11] => 1 large egg, beaten
+            [12] => 1 cup water
+            [13] => 1 cup sugar
+            [14] => 1 cinnamon stick
+        )
+
+    [recipeYield] => 9 servings
+    [recipeInstructions] => Array
+        (
+            [0] => Array
+                (
+                    [@type] => HowToStep
+                    [text] => Make the Cuban-style pork: Preheat the oven to 300°F (150°C).
+                )
+
+            [1] => Array
+                (
+                    [@type] => HowToStep
+                    [text] => In a small bowl, mix together the cumin, oregano, salt, and Sazón.
+                )
+
+            [2] => Array
+                (
+                    [@type] => HowToStep
+                    [text] => Place the pork shoulder in a 9 x 13-inch (22 x 33 c,m) ( baking dish. Sprinkle the spice mixture all over, then pour the mojo marinade and water on top.
+                )
+
+            [3] => Array
+                (
+                    [@type] => HowToStep
+                    [text] => Cover the baking dish tightly with foil. Transfer the pork to the oven and bake for 10 hours, until extremely tender and the liquid has reduced.
+                )
+
+            [4] => Array
+                (
+                    [@type] => HowToStep
+                    [text] => Drain the liquid from the pan into a bowl and set aside. Using 2 forks, shred the pork, discarding any fatty bits. Pour the reserved braising liquid over the pork and toss until well combined. You should have about 4 cups. The pork will keep in an airtight container in the refrigerator until ready to use, up to 4 days.
+                )
+
+            [5] => Array
+                (
+                    [@type] => HowToStep
+                    [text] => Make the cubano pies: Preheat the oven to 350°F (180°C). Line 2 baking sheets with parchment paper.
+                )
+
+            [6] => Array
+                (
+                    [@type] => HowToStep
+                    [text] => Lay 1 sheet of puff pastry on a clean surface and use a knife or pizza cutter to mark 9 squares.
+                )
+
+            [7] => Array
+                (
+                    [@type] => HowToStep
+                    [text] => Scoop 3 heaping tablespoons of Cuban-style pork onto each square (save the leftover pork for another use). Top each portion with 2 pickle slices, a drizzle of yellow mustard, and a half slice of Swiss cheese.
+                )
+
+            [8] => Array
+                (
+                    [@type] => HowToStep
+                    [text] => Gently lay the remaining sheet of puff pastry over the pork mounds. Use your fingers to press the dough together around the edges, then between the squares. Using a knife or pizza cutter, cut through to make 9 individual squares.
+                )
+
+            [9] => Array
+                (
+                    [@type] => HowToStep
+                    [text] => Transfer the pies to the prepared baking sheets. Brush the tops with the beaten egg.
+                )
+
+            [10] => Array
+                (
+                    [@type] => HowToStep
+                    [text] => Bake for 25–35 minutes, until deep golden brown and firm.
+                )
+
+            [11] => Array
+                (
+                    [@type] => HowToStep
+                    [text] => Meanwhile, combine the water, sugar, and cinnamon stick in a small saucepan. Bring to a boil over medium-high heat and cook for 3 minutes, until the sugar is fully dissolved. Remove the pot from the heat.
+                )
+
+            [12] => Array
+                (
+                    [@type] => HowToStep
+                    [text] => Remove the Cubano pies from the oven and immediately brush with the cinnamon syrup. Serve warm.
+                )
+
+            [13] => Array
+                (
+                    [@type] => HowToStep
+                    [text] => Enjoy!
+                )
+
+        )
+
+    [aggregateRating] => Array
+        (
+            [@type] => AggregateRating
+            [ratingValue] => 100
+            [ratingCount] => 6
+            [bestRating] => 100
+            [worstRating] => 0
+        )
+
+    [cookingMethod] => Bake
+    [recipeCategory] => Bakery Goods
+    [recipeCuisine] => Latin American
+    [tool] => Chef's Knife
+    [cookTime] => PT10H35M
+    [prepTime] => PT25M
+    [totalTime] => PT11H
+)
+

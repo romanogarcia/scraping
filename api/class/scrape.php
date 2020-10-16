@@ -56,6 +56,9 @@
         public function parseContent($url){
             $content = file_get_contents($url);
             preg_match_all('#<script type="application\/ld\+json">(.*?)</script>#is', $content, $matches);
+            preg_match_all('#<title>(.*?)</title>#is', $content, $array_title);
+            $metatags = get_meta_tags($url);
+            
             $json_data  = trim(preg_replace('/\s\s+/', ' ', $matches[1][0]));
             $recipe_data = json_decode($json_data);
 
@@ -65,6 +68,13 @@
             $data = array();
             $data["page_id"] = hash('sha256', $url);
             $data["source"] = $this->getDomainName($url);
+
+            $data["metadata"] = array(
+                "title"=>(isset($array_title[1][0])) ? $array_title[1][0] : $metatags['twitter:title'], 
+                "description"=>$metatags['description'] );
+            $data["category"] = $recipe_data->recipeCategory;
+            $data["sub_categories"] = array();
+
             $data["recipe_url"] = $url;
             $data["recipe_name"] = str_replace("Recipe by Tasty", "", $recipe_data->name);
             $data["recipe_img"] =  $recipe_data->image;
