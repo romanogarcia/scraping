@@ -6,23 +6,67 @@ $array = array(0 => '<script type="xapplication/ld+json', 1 => '<script type="ap
 $key = array_search($search_str, $array); // $key = 2;
 // print_r($array[$key]);
 
-// Allrecipes
-// Tasty.co
-// foodnetwork.com
-// delish.com
-// simplyrecipes.com
-// spendwithpennies.com
-// pillsbury.com
-// skinnytaste.com
-// cookingclassy.com
-// gimmesomeoven.com
-// cafedelites.com
-// cookieandkate.com
-// dinneratthezoo.com
-// dinnerthendessert.com
 
-// $url = "https://www.spendwithpennies.com/air-fryer-home-fries/"; //yoast-
-$url = "https://tasty.co/recipe/cubano-pies-as-made-by-vivian-hernandez-jackson"; //recipe only
+// Allrecipes check multiple type of schema
+// https://www.allrecipes.com/sitemap.xml
+
+// Tasty.co w/schema
+// https://tasty.co/sitemaps/tasty/sitemap.xml
+
+// foodnetwork.com w/schema
+// https://www.foodnetwork.com/fn-dish.news-sitemap.xml   (incomplete sitemap report)
+
+// delish.com  w/schema
+
+// simplyrecipes.com w/schema
+// https://www.simplyrecipes.com/sitemap.xml
+
+// spendwithpennies.com w/schema yoast multi
+// https://www.spendwithpennies.com/sitemap_index.xml
+
+// pillsbury.com w/schema not ljson
+// https://www.pillsbury.com/sitemap.xml
+
+// skinnytaste.com w/schema
+// https://www.skinnytaste.com/sitemap_index.xml
+
+// cookingclassy.com w/schema yoast multi
+// https://www.cookingclassy.com/sitemap_index.xml
+
+// gimmesomeoven.com w/schema yoast multi
+// https://www.gimmesomeoven.com/sitemap_index.xml
+
+// cafedelites.com w/schema yoast multi
+// https://cafedelites.com/sitemap_index.xml
+
+// cookieandkate.com w/schema yoast multi
+// https://cookieandkate.com/sitemap_index.xml
+
+// dinneratthezoo.com w/schema yoast multi
+//https://www.dinneratthezoo.com/sitemap_index.xml
+
+// dinnerthendessert.com w/schema yoast multi
+// https://dinnerthendessert.com/sitemap_index.xml
+
+// /sitemap
+// /sitemap.xml
+// /sitemap_index.xml
+
+
+$url = "https://recipes.net/breakfast/poached-egg/poached-eggs-with-sauteed-spinach-and-yogurt-sauce-recipe/"; 
+$url = "https://www.allrecipes.com/recipe/21202/ham-and-cheese-breakfast-tortillas/";
+$url = "https://www.foodnetwork.com/recipes/ellie-krieger/three-bean-and-beef-chili-recipe-1917076";
+$url = "https://www.spendwithpennies.com/air-fryer-home-fries/"; //yoast-
+$url = "https://www.simplyrecipes.com/recipes/easy_cucumber_peach_and_basil_salad/";
+$url = "https://www.pillsbury.com/recipes/5-ingredient-cheesy-beef-enchilada-crescent-cups/69c5124c-0e18-409e-bc10-b892ddf8afdf";
+$url = "https://www.skinnytaste.com/air-fryer-chicken-nuggets/";
+$url = "https://www.cookingclassy.com/marinated-grilled-teriyaki-chicken/";
+$url = "https://www.gimmesomeoven.com/butternut-squash-quiche/";
+$url = "https://cafedelites.com/buttery-garlic-naan-recipe/";
+$url = "https://cookieandkate.com/easy-tomato-salad-recipe/";
+$url = "https://www.dinneratthezoo.com/honey-chicken/";
+$url = "https://dinnerthendessert.com/ground-sesame-chicken/";
+//$url = "https://tasty.co/recipe/cubano-pies-as-made-by-vivian-hernandez-jackson"; //recipe only
 // $url = "https://tasty.co/recipe/fajita-parchment-baked-chicken"; //multi schema
 $out = file_get_contents($url);
 $start = '<script type="application/ld+json'; //" class="yoast-schema-graph">'; 
@@ -31,30 +75,39 @@ $end = "</script>";
 $startsAt = strpos($out, $start) + strlen($start);
 $endsAt = strpos($out, $end, $startsAt);
 $result = substr($out, $startsAt, $endsAt - $startsAt);
-//$variable = substr($result, 0, strpos($result, "{")); //remove after
-$content = substr($result, strpos($result, '{') + 0); //retain the {
+// $variable = substr($result, 0, strpos($result, "{")); //remove after
+// $content =  substr($result, strpos($result, '">') ); //retain the {
+$content = ltrim($result, '">'); 
+
 $data = json_decode($content, true);
+print_r($result); die();
+
 if (isset($data['@type'])) { //single
 	print_r($data);
+	echo PHP_EOL . "Single " . PHP_EOL;
 } else { // multi
 	foreach ($data as $values){
 		// print_r($values);
-		if (is_array($values)){ 
-			foreach ($values as $val){
-				if ($val['@type'] == "Recipe"){
-					print_r($val);
-					echo PHP_EOL . "FOUND RECIPE " . $i . PHP_EOL;
-				}	
-			}
+		if ($values['@type'] == "Recipe"){
+			print_r($values);
 		}
+		// if (is_array($values)){ 
+		// 	foreach ($values as $val){
+		// 		if ($val['@type'] == "Recipe"){
+		// 			print_r($val);
+		// 			echo PHP_EOL . "FOUND RECIPE " . $i . PHP_EOL;
+		// 		}	
+		// 	}
+		// }
+		echo PHP_EOL . "multi - Single " . PHP_EOL;
 	}	
 }
 
 //3LebS8eFZDXNgKduXcvPKcMVZzzAJJUdtA
 
 // print_r($data);
-echo PHP_EOL . count($data) . PHP_EOL;
-$i = 0;
+// echo PHP_EOL . count($data) . PHP_EOL;
+// $i = 0;
 
 // echo $variable . PHP_EOL;
 // print_r($result);
@@ -77,4 +130,3 @@ echo PHP_EOL ;
 // print_r($matches[0][2]);
 // $recipe_data = json_decode($json_data);
 // print_r($recipe_data);
-

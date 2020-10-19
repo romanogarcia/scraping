@@ -244,7 +244,7 @@
                     "ing_type"=> "text",
                     "ing_amt"=> trim($amt),
                     "ing_unit"=> trim($unit),
-                    "ing_name"=> trim($ingredient),
+                    "ing_name"=> trim( str_replace($amt, "", str_replace($unit, "", trim($ingredient)))),
                     "ing_notes"=> "",
                     "ing_link"=> "",
                     "ing_link_text"=> ""
