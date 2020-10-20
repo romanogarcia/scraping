@@ -1,0 +1,31 @@
+SimpleXMLElement Object
+(
+    [sitemap] => Array
+        (
+            [0] => SimpleXMLElement Object
+                (
+                    [loc] => https://www.dinneratthezoo.com/post-sitemap1.xml
+                    [lastmod] => 2020-03-26T00:13:25+00:00
+                )
+
+            [1] => SimpleXMLElement Object
+                (
+                    [loc] => https://www.dinneratthezoo.com/post-sitemap2.xml
+                    [lastmod] => 2020-10-14T22:25:57+00:00
+                )
+
+            [2] => SimpleXMLElement Object
+                (
+                    [loc] => https://www.dinneratthezoo.com/page-sitemap.xml
+                    [lastmod] => 2020-07-14T00:36:04+00:00
+                )
+
+            [3] => SimpleXMLElement Object
+                (
+                    [loc] => https://www.dinneratthezoo.com/category-sitemap.xml
+                    [lastmod] => 2020-10-14T22:25:57+00:00
+                )
+
+        )
+
+)

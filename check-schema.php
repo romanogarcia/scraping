@@ -66,18 +66,55 @@ $url = "https://cafedelites.com/buttery-garlic-naan-recipe/";
 $url = "https://cookieandkate.com/easy-tomato-salad-recipe/";
 $url = "https://www.dinneratthezoo.com/honey-chicken/";
 $url = "https://dinnerthendessert.com/ground-sesame-chicken/";
-//$url = "https://tasty.co/recipe/cubano-pies-as-made-by-vivian-hernandez-jackson"; //recipe only
+$url2 = "https://tasty.co/recipe/cubano-pies-as-made-by-vivian-hernandez-jackson"; //recipe only
 // $url = "https://tasty.co/recipe/fajita-parchment-baked-chicken"; //multi schema
 $out = file_get_contents($url);
-$start = '<script type="application/ld+json'; //" class="yoast-schema-graph">'; 
-// $start = '<script type="application/ld+json">';
-$end = "</script>";
-$startsAt = strpos($out, $start) + strlen($start);
-$endsAt = strpos($out, $end, $startsAt);
-$result = substr($out, $startsAt, $endsAt - $startsAt);
-// $variable = substr($result, 0, strpos($result, "{")); //remove after
-// $content =  substr($result, strpos($result, '">') ); //retain the {
-$content = ltrim($result, '">'); 
+// $start = '<script type="application/ld+json'; //" class="yoast-schema-graph">'; 
+// // $start = '<script type="application/ld+json">';
+// $end = "</script>";
+// $startsAt = strpos($out, $start) + strlen($start);
+// $endsAt = strpos($out, $end, $startsAt);
+// $result = substr($out, $startsAt, $endsAt - $startsAt);
+// // $variable = substr($result, 0, strpos($result, "{")); //remove after
+// // $content =  substr($result, strpos($result, '">') ); //retain the {
+// $content = ltrim($result, '">'); 
+
+
+$content = file_get_contents($url);
+preg_match_all('#<script type="application\/ld\+json" class="yoast-schema-graph">(.*?)</script>#is', $content, $matches);
+$json_data  = trim(preg_replace('/\s\s+/', ' ', $matches[1][0]));
+$data = json_decode($json_data, true); 
+foreach ($data as $key=>$values){ 
+	if (is_array($values)){ 
+		foreach ($values as $val){
+			if (is_array($val['@type']))
+				continue;
+			echo 'values ' . $val['@type'] . PHP_EOL;
+		}
+	}
+}
+
+$content2 = file_get_contents($url2);
+$word = "yoast-schema-graph";
+if(strpos($content2, $word) !== false){
+    echo "Word Found! yoast" . PHP_EOL;
+} else{
+    echo "Word Not Found!" . PHP_EOL;
+}
+
+$myXMLData =
+"<?xml version='1.0' encoding='UTF-8'?>
+<note>
+<to>Tove</to>
+<from>Jani</from>
+<heading>Reminder</heading>
+<body>Don't forget me this weekend!</body>
+</note>";
+
+$xml=simplexml_load_string($myXMLData) or die("Error: Cannot create object");
+print_r($xml);
+die();
+
 
 $data = json_decode($content, true);
 print_r($result); die();
@@ -103,6 +140,15 @@ if (isset($data['@type'])) { //single
 	}	
 }
 
+
+function getDomainName($url){
+    $pieces = parse_url($url);
+    $domain = isset($pieces['host']) ? $pieces['host'] : '';
+    if(preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $domain, $regs)){
+        return $regs['domain'];
+    }
+    return "Invalid site url!";
+}
 //3LebS8eFZDXNgKduXcvPKcMVZzzAJJUdtA
 
 // print_r($data);
