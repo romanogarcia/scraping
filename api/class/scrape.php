@@ -2,7 +2,11 @@
     class Scrape{
 
         // Columns
-        // public $id;
+        private $host = "localhost";
+        private $db_name = "recipesearchdb";
+        private $username = "recipesearchsql";
+        private $password = "pIfanlwathuS0utr"; 
+        public $conn;
 
         public function site($params){
             
@@ -12,6 +16,9 @@
                     break;
                 case "recipes.net":
                     return $this->recipesNet($params);
+                    break;
+                case "cookingclassy.com":
+                    return $this->siteMultiUrl($params);
                     break;
                 // case: "delish.com":
                 //     return "delish.com";
@@ -41,6 +48,33 @@
             return "REcipesNET";
         }
 
+        public function siteMultiUrl($params){
+
+            $site_name=$params['site_name'];
+            $url=$params['url'];
+            $size=$params['size'];
+            $from=$params['from'];
+
+            // Create connection
+            $conn = new mysqli($this->host, $this->username, $this->password, $this->db_name);
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            $sql = "SELECT * FROM `$site_name` LIMIT $size OFFSET $from";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $url_array[] = $row["url"];
+                }
+            } else {
+                echo "0 results";
+            }
+            
+            return $this->getSiteContent($url_array);
+        }
+
         public function formatTastyResponse($response){
             $urls = array();
             $data = array();
@@ -53,15 +87,48 @@
             return $data;
         }
 
+        public function getSiteContent($urls){
+            $dat = array();
+            foreach($urls as $url){
+                $data[] = $this->parseContent($url);
+            }
+
+            return $data;
+        }
+
         public function parseContent($url){
             $content = file_get_contents($url);
-            preg_match_all('#<script type="application\/ld\+json">(.*?)</script>#is', $content, $matches);
+            if ($this->getDomainName($url) == "cookingclassy.com"){ 
+                preg_match_all('#<script type="application\/ld\+json" class="yoast-schema-graph">(.*?)</script>#is', $content, $matches);
+                
+                $json_data  = trim(preg_replace('/\s\s+/', ' ', $matches[1][0]));
+                $data = json_decode($json_data, true);
+                // print_r($data); die();
+
+                if (isset($data['@type'])) { ; //single
+                } else { // multi
+                    foreach ($data as $key=>$values){ 
+                        if (is_array($values)){ 
+                            foreach ($values as $val){
+                                if (is_array($val['@type']))
+                                    continue;
+                                echo 'values ' . $val['@type'] . PHP_EOL;
+                                if ($val['@type'] == "Recipe"){
+                                    $json_data = json_encode($val, true);
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                preg_match_all('#<script type="application\/ld\+json">(.*?)</script>#is', $content, $matches);
+                $json_data  = trim(preg_replace('/\s\s+/', ' ', $matches[1][0]));
+            }
+
             preg_match_all('#<title>(.*?)</title>#is', $content, $array_title);
             $metatags = get_meta_tags($url);
-            
-            $json_data  = trim(preg_replace('/\s\s+/', ' ', $matches[1][0]));
             $recipe_data = json_decode($json_data);
-
+            
             if (!$recipe_data->recipeInstructions && !$recipe_data->recipeIngredient)
                 return;
             //print_r($recipe_data);
