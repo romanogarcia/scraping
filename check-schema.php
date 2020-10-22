@@ -21,19 +21,19 @@ $key = array_search($search_str, $array); // $key = 2;
 // simplyrecipes.com w/schema
 // https://www.simplyrecipes.com/sitemap.xml
 
-// spendwithpennies.com w/schema yoast multi
+// spendwithpennies.com w/schema yoast multi   *** in dev  *****
 // https://www.spendwithpennies.com/sitemap_index.xml
 
 // pillsbury.com w/schema not ljson
 // https://www.pillsbury.com/sitemap.xml
 
-// skinnytaste.com w/schema
+// skinnytaste.com w/schema *** in dev  *****
 // https://www.skinnytaste.com/sitemap_index.xml
 
-// cookingclassy.com w/schema yoast multi
+// cookingclassy.com w/schema yoast multi *** in dev ****
 // https://www.cookingclassy.com/sitemap_index.xml
 
-// gimmesomeoven.com w/schema yoast multi
+// gimmesomeoven.com w/schema yoast multi *** in dev  *****
 // https://www.gimmesomeoven.com/sitemap_index.xml
 
 // cafedelites.com w/schema yoast multi
@@ -128,14 +128,6 @@ if (isset($data['@type'])) { //single
 		if ($values['@type'] == "Recipe"){
 			print_r($values);
 		}
-		// if (is_array($values)){ 
-		// 	foreach ($values as $val){
-		// 		if ($val['@type'] == "Recipe"){
-		// 			print_r($val);
-		// 			echo PHP_EOL . "FOUND RECIPE " . $i . PHP_EOL;
-		// 		}	
-		// 	}
-		// }
 		echo PHP_EOL . "multi - Single " . PHP_EOL;
 	}	
 }
@@ -150,7 +142,10 @@ function getDomainName($url){
     return "Invalid site url!";
 }
 //3LebS8eFZDXNgKduXcvPKcMVZzzAJJUdtA
-
+// IP: dev4.tell.com
+// Linux:
+// username: scrapeadm
+// pwd: JEdr1fre6Lp9cr
 // print_r($data);
 // echo PHP_EOL . count($data) . PHP_EOL;
 // $i = 0;

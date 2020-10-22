@@ -36,7 +36,7 @@ foreach ($xml as $val){
 		 
 		foreach($dataXml as $val){
 			$url = $val->loc[0];
-			$content = file_get_contents($val->loc[0]);
+			$content = file_get_contents($val->loc[0], false, $context);
 			if(strpos($content, '@type": "Recipe') !== false || strpos($content, '@type":"Recipe') !== false ){
 				$sql = "INSERT INTO `$tablename` (url, scrape, updated, created) VALUES ('".$url."', '".$scrape."', '".$scrape_date."', '".$date_created."')";
 

@@ -11,23 +11,30 @@
     $url = isset($_GET['url']) ? $_GET['url'] : null;
     $size = isset($_GET['size']) ? $_GET['size'] : "";
     $from = isset($_GET['from']) ? $_GET['from'] : "";
+    $count_url =  isset($_GET['count']) ? $_GET['count'] : null;
     
     $params['site_name'] = $site_name;
     $params['url'] = $url;
     $params['size'] = $size;
     $params['from'] = $from;
-
-    if($site_name != null) {
+    $params['count_url'] = $count_url;
+    
+    if($site_name != null && $count_url == null ) {
         $scrape = new Scrape();
         $data = $scrape->site($params);
         http_response_code(200);
         echo json_encode($data, JSON_UNESCAPED_SLASHES);
-    } else if ( $url != null && $site_name == null ) {
+    } else if ( $site_name == null && $url != null ) {
         $scrape = new Scrape();
         $data = $scrape->parseContent($url);
         http_response_code(200);
         echo json_encode($data, JSON_UNESCAPED_SLASHES);
-    } else {
+    } else if (  $site_name == null && $count_url != null ){
+        $scrape = new Scrape();
+        $data = $scrape->countUrl($params);
+        http_response_code(200);
+        echo json_encode($data, JSON_UNESCAPED_SLASHES);
+    }  else {
         http_response_code(404);
         echo json_encode("Sitename not found.");
     }

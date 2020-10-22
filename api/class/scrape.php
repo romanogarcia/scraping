@@ -9,6 +9,10 @@
 
         public $conn;
 
+        public function __construct(){
+            
+        }
+
         public function site($params){
             
             switch ($params['site_name']) {
@@ -28,6 +32,9 @@
                     return $this->siteMultiUrl($params);
                     break;
                 case "cafedelites.com":
+                    return $this->siteMultiUrl($params);
+                    break;
+                case "skinnytaste.com":
                     return $this->siteMultiUrl($params);
                     break;
                 default:
@@ -107,8 +114,9 @@
             $content = file_get_contents($url);
             if ($this->getDomainName($url) == "cookingclassy.com" || 
                 $this->getDomainName($url) == "spendwithpennies.com" || 
-                $this->getDomainName($url) == "gimmesomeoven.com"
-                ) { 
+                $this->getDomainName($url) == "gimmesomeoven.com" 
+                //$this->getDomainName($url) == "skinnytaste.com"
+            ) { 
                 preg_match_all('#<script type="application\/ld\+json" class="yoast-schema-graph">(.*?)</script>#is', $content, $matches);
 
                 if(!isset($matches[1][0])) {
@@ -153,8 +161,8 @@
 
             $data["metadata"] = array(
                 "title"=>(isset($array_title[1][0])) ? $array_title[1][0] : $metatags['twitter:title'], 
-                "description"=>$metatags['description'] );
-            $data["category"] = $recipe_data->recipeCategory;
+                "description"=>(isset($metatags['description'])) ? $metatags['description'] : null);
+            $data["category"] = (isset($recipe_data->recipeCategory)) ? $recipe_data->recipeCategory : null;
             $data["sub_categories"] = array();
 
             $data["recipe_url"] = $url;
@@ -166,7 +174,7 @@
             $data["recipe_video_embedded"] = "";
             $data["recipe_type"] = "";
             $data["summary"] = (isset($recipe_data->description)) ? $recipe_data->description : null;
-            $data["servings"] = $recipe_data->recipeYield;
+            $data["servings"] = (isset($recipe_data->recipeYield)) ? $recipe_data->recipeYield : null;
             $data["servings_unit"] = "";
             $data["estimated_cost"] = "";
             
@@ -231,7 +239,6 @@
             if ($recipe_data->nutrition){
                 $nutritions = $this->getNutritionalFacts($recipe_data->nutrition);
             } else $nutritions = null;
-
             $data["nutritional_facts"] = $nutritions;
 
             $data["notes"] = (isset($recipe_data->notes)) ? $recipe_data->notes : null;
@@ -276,7 +283,7 @@
                 $data[] = array(
                     "id"=>"", 
                     "type"=>"text",
-                    "value"=>$instruction->text, 
+                    "value"=>(isset($instruction->text)) ? $instruction->text : "", 
                     "image"=>array( 
                         "src"=>"",
                         "alt"=>"",
@@ -356,8 +363,9 @@
 
         public function getCategoriesObj($recipe_data){
             $data = [];  
+            $category = (isset($recipe_data->recipeCategory)) ? $recipe_data->recipeCategory : null;
             $data = array(
-                    'courses'=>$this->getCourses($recipe_data->recipeCategory),
+                    'courses'=>$this->getCourses($category),
                     'cuisines'=>$this->getCuisines($recipe_data->recipeCuisine),
                     'difficulties'=>$this->getDifficulties($recipe_data),
                     'keywords'=> $this->getKeywords($recipe_data->keywords),
@@ -371,6 +379,8 @@
 
         public function getCourses($courses){
             //$courses = array("Breakfast","Dinner","Dipping Sauce");
+            if ($courses == null) return;
+
             $data = [];
             if ($courses){
                 if(is_array($courses)){ 
@@ -417,34 +427,41 @@
 
         public function getNutritionalFacts($nutritions){
             $data = [];
-            // [nutrition] => stdClass Object
-            // (
-            //     [@type] => NutritionInformation
-            //     [calories] => 287 kcal
-            //     [carbohydrateContent] => 62 g
-            //     [proteinContent] => 7 g
-            //     [fatContent] => 2 g
-            //     [saturatedFatContent] => 1 g
-            //     [cholesterolContent] => 70 mg
-            //     [sodiumContent] => 624 mg
-            //     [fiberContent] => 5 g
-            //     [sugarContent] => 24 g
-            //     [servingSize] => 1 serving
-            // )
-            // "nutritional_facts": {
-            //     "serving_size": {
-            //       "qty": "",
-            //       "unit": ""
-            //     },
-            // }
-            // if($nutritions){
-            //     foreach( $nutritions as $key => $nutrition ){ 
-            //         $nutrition['label']; 
-            //         $nutrition['value'] . $nutrition['unit']  
-            //     }
+            $d=(array)($nutritions);
+            foreach( $d as $key => $value ){
+                if ($key == "@type")
+                    continue;
+                $vars = explode(" ", $value);
+                $unit = end($vars);
+                $nutrition_data[$key] = array( "qty"=>trim(str_replace($unit,"",$value)), "unit"=>$unit );
+            }
 
-            // }
-            return;
+            return $nutrition_data;
+        }
+
+        public function countUrl($params){
+            $site_name = $params['count_url'];
+            $data['site_name'] = $site_name;
+            // Create connection
+            $conn = new mysqli($this->host, $this->username, $this->password, $this->db_name);
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            } 
+            $query = "SELECT url FROM `$site_name`";
+            if ($stmt = $conn->prepare($query)) {
+                /* execute query */
+                $stmt->execute();
+                /* store result */
+                $stmt->store_result();
+                $data['total_rows'] = $stmt->num_rows;
+                /* close statement */
+                $stmt->close();
+            }
+            /* close connection */
+            $conn->close();
+
+            return $data;
         }
 
     }
