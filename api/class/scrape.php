@@ -2,10 +2,11 @@
     class Scrape{
 
         // Columns
-        private $host = "localhost";
+        private $host = "127.0.0.1";
         private $db_name = "recipesearchdb";
         private $username = "recipesearchsql";
         private $password = "pIfanlwathuS0utr"; 
+
         public $conn;
 
         public function site($params){
@@ -20,9 +21,15 @@
                 case "cookingclassy.com":
                     return $this->siteMultiUrl($params);
                     break;
-                // case: "delish.com":
-                //     return "delish.com";
-                //     break;
+                case "spendwithpennies.com":
+                    return $this->siteMultiUrl($params);
+                    break;
+                case "gimmesomeoven.com":
+                    return $this->siteMultiUrl($params);
+                    break;
+                case "cafedelites.com":
+                    return $this->siteMultiUrl($params);
+                    break;
                 default:
                     return "Sitename not found or invalid!";
             }
@@ -70,8 +77,8 @@
                 }
             } else {
                 echo "0 results";
-            }
-            
+            } 
+
             return $this->getSiteContent($url_array);
         }
 
@@ -98,10 +105,18 @@
 
         public function parseContent($url){
             $content = file_get_contents($url);
-            if ($this->getDomainName($url) == "cookingclassy.com"){ 
+            if ($this->getDomainName($url) == "cookingclassy.com" || 
+                $this->getDomainName($url) == "spendwithpennies.com" || 
+                $this->getDomainName($url) == "gimmesomeoven.com"
+                ) { 
                 preg_match_all('#<script type="application\/ld\+json" class="yoast-schema-graph">(.*?)</script>#is', $content, $matches);
-                
+
+                if(!isset($matches[1][0])) {
+                    preg_match_all("#<script type='application\/ld\+json' class='yoast-schema-graph yoast-schema-graph--main'>(.*?)</script>#is",$content,$matches);
+                }
+
                 $json_data  = trim(preg_replace('/\s\s+/', ' ', $matches[1][0]));
+
                 $data = json_decode($json_data, true);
                 // print_r($data); die();
 
@@ -112,7 +127,7 @@
                             foreach ($values as $val){
                                 if (is_array($val['@type']))
                                     continue;
-                                echo 'values ' . $val['@type'] . PHP_EOL;
+                                // echo 'values ' . $val['@type'] . PHP_EOL;
                                 if ($val['@type'] == "Recipe"){
                                     $json_data = json_encode($val, true);
                                 }
