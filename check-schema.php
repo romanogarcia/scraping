@@ -18,34 +18,34 @@ $key = array_search($search_str, $array); // $key = 2;
 
 // delish.com  w/schema
 
-// simplyrecipes.com w/schema
+// simplyrecipes.com w/schema    *** in dev  ***************
 // https://www.simplyrecipes.com/sitemap.xml
 
-// spendwithpennies.com w/schema yoast multi   *** in dev  *****
+// spendwithpennies.com w/schema yoast multi   *** in dev  ***************
 // https://www.spendwithpennies.com/sitemap_index.xml
 
 // pillsbury.com w/schema not ljson
 // https://www.pillsbury.com/sitemap.xml
 
-// skinnytaste.com w/schema *** in dev  *****
+// skinnytaste.com w/schema *** in dev  ***************
 // https://www.skinnytaste.com/sitemap_index.xml
 
-// cookingclassy.com w/schema yoast multi *** in dev ****
+// cookingclassy.com w/schema yoast multi *** in dev **************
 // https://www.cookingclassy.com/sitemap_index.xml
 
-// gimmesomeoven.com w/schema yoast multi *** in dev  *****
+// gimmesomeoven.com w/schema yoast multi *** in dev  ***************
 // https://www.gimmesomeoven.com/sitemap_index.xml
 
-// cafedelites.com w/schema yoast multi
+// cafedelites.com w/schema yoast multi *** in dev ***************
 // https://cafedelites.com/sitemap_index.xml
 
-// cookieandkate.com w/schema yoast multi
+// cookieandkate.com w/schema yoast multi  *** in dev *************
 // https://cookieandkate.com/sitemap_index.xml
 
-// dinneratthezoo.com w/schema yoast multi
+// dinneratthezoo.com w/schema yoast multi *** in dev ************* 
 //https://www.dinneratthezoo.com/sitemap_index.xml
 
-// dinnerthendessert.com w/schema yoast multi
+// dinnerthendessert.com w/schema yoast multi  *** in dev ************* 
 // https://dinnerthendessert.com/sitemap_index.xml
 
 // /sitemap
@@ -149,6 +149,7 @@ function getDomainName($url){
 // print_r($data);
 // echo PHP_EOL . count($data) . PHP_EOL;
 // $i = 0;
+
 
 // echo $variable . PHP_EOL;
 // print_r($result);

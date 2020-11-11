@@ -1,0 +1,91 @@
+CREATE TABLE IF NOT EXISTS  `recipesearchdb`.`cookingclassy.com` (
+ `id` INT NOT NULL AUTO_INCREMENT ,
+ `url` LONGTEXT,
+ `scrape` VARCHAR(100),
+ `updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
+ `created` DATETIME DEFAULT NULL ,
+PRIMARY KEY ( `id` )
+);
+
+1. Domains to get recipes from and contents (here are some we can look into)
+
+Allrecipes
+Tasty.co
+foodnetwork.com
+delish.com
+simplyrecipes.com
+spendwithpennies.com
+pillsbury.com
+skinnytaste.com
+cookingclassy.com
+gimmesomeoven.com
+cafedelites.com
+cookieandkate.com
+dinneratthezoo.com
+dinnerthendessert.com
+
+// $url = "https://dinnerthendessert.com/sitemap_index.xml";
+// $url = "https://www.dinneratthezoo.com/sitemap_index.xml";
+// $url = "https://cookieandkate.com/sitemap_index.xml";
+// $url = "https://cafedelites.com/sitemap_index.xml";
+// $url = "https://www.gimmesomeoven.com/sitemap_index.xml";
+$url = "https://www.cookingclassy.com/sitemap_index.xml";
+// $url = "https://www.skinnytaste.com/sitemap_index.xml";
+// $url = "https://www.pillsbury.com/sitemap.xml"; // not ldjson schema
+// $url = "https://www.spendwithpennies.com/sitemap_index.xml";
+// $url = "https://www.simplyrecipes.com/sitemap.xml"; //forbidden error
+// $url = "https://www.allrecipes.com/sitemap.xml";
+// Allrecipes *
+// Tasty.co api
+// foodnetwork.com --
+// delish.com --
+// simplyrecipes.com *
+// spendwithpennies.com *
+// pillsbury.com  *
+// skinnytaste.com *
+// cookingclassy.com *
+// gimmesomeoven.com *
+// cafedelites.com *
+// cookieandkate.com *
+// dinneratthezoo.com *
+// dinnerthendessert.com *
+
+
+2. What are the data we need to scrape
+
+Domain Name
+Recipe Title:
+Image:
+Video?
+Description
+Ingredients:
+Direction:
+Servings
+Prep Time
+Cook Time
+Custom time
+Main Category
+Sub Category
+Nutrition Facts
+
+3. How it will look like and how to manipulate data on the backend
+
+Requirements
+Can view the content and move the content over to the new page
+Can record domain id - do mapping example: code 01 is from Domain1 etc
+Editor can edit the title
+Editor can edit/ add photos inside the system
+Editor can view the video but would not be able to copy on our site, can add videos inside the system
+Editors can view the body description but wont be able to add it in. Hence they can add a new one
+Editor can manipulate the ingredients or can add a converter. Current plugin has one
+Can move direction and can edit
+Can move serving value
+Can move Prep, Cook and Custom Time, Editor can calculate the total
+Can move and edit cat and sub cat
+Editor can view the Nutrition Facts but can also do calculation using the plugin
+
+
+
+http://recipesearch.ieplsg.com/api/scrape.php?count=cafedelites.com
+http://recipesearch.ieplsg.com/api/scrape.php?url=https://cafedelites.com/easy-hot-cross-buns-chocolate-chips/
+http://recipesearch.ieplsg.com/api/scrape.php?name=cafedelites.com&size=10&from=1

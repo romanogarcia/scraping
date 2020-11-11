@@ -18,6 +18,21 @@
     $params['size'] = $size;
     $params['from'] = $from;
     $params['count_url'] = $count_url;
+
+    if (!preg_match('/^([0-9]*)$/', $size) || !preg_match('/^([0-9]*)$/', $from) ) {
+        $response['status'] = "Error";
+        $response['message'] = "Invalid format in 'size' or 'from'";
+        http_response_code(200);
+        echo json_encode($response, JSON_UNESCAPED_SLASHES);
+        exit(); 
+    }
+    if ($size > 100){ 
+        $response['status'] = "Error";
+        $response['message'] = "Maximum 100 url per request";
+        http_response_code(200);
+        echo json_encode($response, JSON_UNESCAPED_SLASHES);
+        exit(); 
+    }
     
     if($site_name != null && $count_url == null ) {
         $scrape = new Scrape();

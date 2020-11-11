@@ -37,6 +37,18 @@
                 case "skinnytaste.com":
                     return $this->siteMultiUrl($params);
                     break;
+                case "cookieandkate.com":
+                    return $this->siteMultiUrl($params);
+                    break;
+                case "dinneratthezoo.com":
+                    return $this->siteMultiUrl($params);
+                    break;
+                case "dinnerthendessert.com":
+                    return $this->siteMultiUrl($params);
+                    break;
+                case "allrecipes.com": 
+                    return $this->siteMultiUrl($params);
+                    break;
                 default:
                     return "Sitename not found or invalid!";
             }
@@ -86,6 +98,7 @@
                 echo "0 results";
             } 
 
+            $conn->close();
             return $this->getSiteContent($url_array);
         }
 
@@ -114,8 +127,11 @@
             $content = file_get_contents($url);
             if ($this->getDomainName($url) == "cookingclassy.com" || 
                 $this->getDomainName($url) == "spendwithpennies.com" || 
-                $this->getDomainName($url) == "gimmesomeoven.com" 
-                //$this->getDomainName($url) == "skinnytaste.com"
+                $this->getDomainName($url) == "gimmesomeoven.com" || 
+                $this->getDomainName($url) == "cafedelites.com" || 
+                $this->getDomainName($url) == "cookieandkate.com" || 
+                $this->getDomainName($url) == "dinneratthezoo.com" ||
+                $this->getDomainName($url) == "dinnerthendessert.com" 
             ) { 
                 preg_match_all('#<script type="application\/ld\+json" class="yoast-schema-graph">(.*?)</script>#is', $content, $matches);
 
@@ -146,6 +162,18 @@
             } else {
                 preg_match_all('#<script type="application\/ld\+json">(.*?)</script>#is', $content, $matches);
                 $json_data  = trim(preg_replace('/\s\s+/', ' ', $matches[1][0]));
+                
+                if ($this->getDomainName($url) == "allrecipes.com"){
+                    $data = json_decode($json_data, true);
+                    if (isset($data['@type'])) { ; //single
+                    } else { // multi
+                        foreach ($data as $key=>$values){ 
+                            if ($values['@type'] == "Recipe"){
+                                $json_data = json_encode($data[$key], true);
+                            }
+                        }
+                    }
+                }
             }
 
             preg_match_all('#<title>(.*?)</title>#is', $content, $array_title);
@@ -167,7 +195,7 @@
 
             $data["recipe_url"] = $url;
             $data["recipe_name"] = str_replace("Recipe by Tasty", "", $recipe_data->name);
-            $data["recipe_img"] =  $recipe_data->image;
+            $data["recipe_img"] = (is_array($recipe_data->image)) ? $recipe_data->image[0] : $recipe_data->image;
             $data["recipe_pin_img"] = [];
             $data["ratings"] = array("average" => (isset($recipe_data->aggregateRating->ratingValue))  ? $recipe_data->aggregateRating->ratingValue : null, "total"=>(isset($recipe_data->aggregateRating->ratingCount))  ? $recipe_data->aggregateRating->ratingCount : null);
 
@@ -236,14 +264,43 @@
             } else $ingredients = null;
             $data["ingredients"] = $ingredients;
 
-            if ($recipe_data->nutrition){
-                $nutritions = $this->getNutritionalFacts($recipe_data->nutrition);
-            } else $nutritions = null;
+            // if ($recipe_data->nutrition){
+            //     $nutritions = $this->getNutritionalFacts($recipe_data->nutrition);
+            // } else $nutritions = null;
+            $nutritions = (isset($recipe_data->nutrition))?$recipe_data->nutrition:null;
             $data["nutritional_facts"] = $nutritions;
+            
 
             $data["notes"] = (isset($recipe_data->notes)) ? $recipe_data->notes : null;
             
+            $this->saveJsonData($data["source"], $url, $data);
+
             return $data;
+        }
+
+        public function saveJsonData($tablename, $url, $data){ 
+            $conn = new mysqli($this->host, $this->username, $this->password, $this->db_name); 
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+            $json = $conn->real_escape_string(json_encode($data, JSON_UNESCAPED_SLASHES));
+            $sql = "SELECT id FROM `$tablename` WHERE url='{$url}'";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $site_id = $row["id"];
+            // }
+            // if($site_id){ 
+                $sql = "UPDATE `{$tablename}` SET content='{$json}' WHERE id=$site_id";
+                if ($conn->query($sql) === TRUE) {
+                    echo "Updated successfully" . PHP_EOL;
+                } else {
+                    echo "Error: " . $sql . "<br>" . $conn->error;
+                }
+            }
+            //INSERT NEW URL
+
+            $conn->close();
         }
 
         public function getDomainName($url){
@@ -295,9 +352,12 @@
         }
 
         public function getIngredients($ingredients){
-            $special_chars = array('½', '⅓', '⅔', '¼', '¾', '⅕', '⅙', '⅐', '⅛');
+            $special_chars = array('½', '⅓', '⅔', '¼', '¾', '⅕', '⅙', '⅐', '⅛', '1/1', '1/2', '1/3', '1/4', '1/5', '1/6', '1/8', '1/9', '2/3', '3/4');
             $data = array();
             foreach($ingredients as $ingredient) {
+                $temp = htmlspecialchars_decode($ingredient);
+                $ingredient = filter_var($temp, FILTER_SANITIZE_STRING);
+                echo "In " . $ingredient . PHP_EOL;
                 $old = $ingredient;
                 $amt = $s = "";
                 $new = preg_replace('# {2,}#', ' ', $old); //remove the 2 spaces
@@ -328,7 +388,11 @@
                 } else {
                     $amt = $unit = "";
                 }
-                    
+                // $temp = htmlspecialchars_decode($ingredient);
+                // $ingredient = filter_var($temp, FILTER_SANITIZE_STRING);
+                // $temp_temp = htmlspecialchars_decode($amt);
+                // $amt = filter_var($temp_amt, FILTER_SANITIZE_STRING);
+
                 $data[] = array(
                     "ing_type"=> "text",
                     "ing_amt"=> trim($amt),
@@ -364,11 +428,13 @@
         public function getCategoriesObj($recipe_data){
             $data = [];  
             $category = (isset($recipe_data->recipeCategory)) ? $recipe_data->recipeCategory : null;
+            $cuisines = (isset($recipe_data->recipeCuisine)) ? $recipe_data->recipeCuisine : null;
+            $keywords = (isset($recipe_data->keywords)) ? $recipe_data->keywords : null;
             $data = array(
                     'courses'=>$this->getCourses($category),
-                    'cuisines'=>$this->getCuisines($recipe_data->recipeCuisine),
+                    'cuisines'=>$cuisines,//$this->getCuisines($recipe_data->recipeCuisine),
                     'difficulties'=>$this->getDifficulties($recipe_data),
-                    'keywords'=> $this->getKeywords($recipe_data->keywords),
+                    'keywords'=>$keywords,//$this->getKeywords($recipe_data->keywords),
                     'healthy_recipes'=> array(),
                     'seasonalities'=> array(),
                     'meals'=>array() 
